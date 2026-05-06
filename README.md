@@ -48,36 +48,6 @@ Instead of feeling isolated or lost, Colly helps students find their "tribe" —
 
 ---
 
-## 🚀 Getting Started
-
-Clone the project and run it locally:
-
-```bash
-git clone https://github.com/your-username/colly.git
-cd colly
-npm install
-npm run dev
-```
-
-Then open:
-
-```
-http://localhost:3000
-```
-
----
-
-## 🛠️ Built With
-
-* Next.js
-* React
-* Tailwind CSS
-* Radix UI
-* Framer Motion
-* TypeScript
-
----
-
 ## 📌 Project Status
 
 🚧 Currently in early development — more features coming soon!
