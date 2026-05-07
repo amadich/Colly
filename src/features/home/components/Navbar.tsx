@@ -1,9 +1,23 @@
 "use client";
 
-import { ChevronRight } from "@mynaui/icons-react";
+import { useEffect, useState } from "react";
+import { ChevronRight, Bell } from "@mynaui/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, Variants } from "motion/react";
+import { authService } from "@/features/auth/services/auth.service";
+import type { User } from "@/features/auth/types/auth.types";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 const navLinks = [
   { name: "Features", href: "#" },
@@ -13,34 +27,85 @@ const navLinks = [
   { name: "Login", href: "/Login" },
 ];
 
-// 1. Define Container Variants (handles the stagger effect)
 const containerVariants = {
   hidden: { opacity: 0 },
+
   visible: {
     opacity: 1,
+
     transition: {
-      staggerChildren: 0.1, // Delay between each item
-      delayChildren: 0.3,   // Delay before starting the sequence
+      staggerChildren: 0.1,
+      delayChildren: 0.3,
     },
   },
 };
 
-// 2. Define Item Variants (individual movement)
-const itemVariants : Variants = {
-  hidden: { y: -20, opacity: 0 },
+const itemVariants: Variants = {
+  hidden: {
+    y: -20,
+    opacity: 0,
+  },
+
   visible: {
     y: 0,
     opacity: 1,
-    transition: { type: "spring", stiffness: 300, damping: 24 },
+
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 24,
+    },
   },
 };
 
 export default function Navbar() {
+  const [user, setUser] = useState<User | null>(null);
+
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const currentUser = await authService.me();
+
+        setUser(currentUser);
+      } catch {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+
+      setUser(null);
+
+      router.refresh();
+
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <header className="flex items-center justify-around p-4">
-      <motion.div 
-        initial={{ x: -20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
+      {/* Logo */}
+      <motion.div
+        initial={{
+          x: -20,
+          opacity: 0,
+        }}
+        animate={{
+          x: 0,
+          opacity: 1,
+        }}
         className="flex items-center justify-center gap-4"
       >
         <Image
@@ -50,35 +115,94 @@ export default function Navbar() {
           alt="Logo Colly"
           className="scale-x-[-1]"
         />
+
         <div>
           <h2 className="text-lg font-bold">Colly</h2>
+
           <i>Dub Edition</i>
         </div>
       </motion.div>
 
-      {/* Animated List Container */}
-      <motion.ul 
+      {/* Navigation */}
+      <motion.ul
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         className="flex items-center space-x-4"
       >
-        {navLinks.map((link, index) => (
-          <motion.li key={index} variants={itemVariants}>
-            <Link href={link.href} className="hover:text-neutral-500 duration-200">
-              {link.name}
+        {navLinks
+          .filter((link) => {
+            if (user && link.name === "Login") {
+              return false;
+            }
+
+            return true;
+          })
+          .map((link, index) => (
+            <motion.li key={index} variants={itemVariants}>
+              <Link
+                href={link.href}
+                className="hover:text-neutral-500 duration-200"
+              >
+                {link.name}
+              </Link>
+            </motion.li>
+          ))}
+
+        {/* Show only when NOT logged in */}
+        {!user && !loading && (
+          <motion.li variants={itemVariants}>
+            <Link href={"/Signup"}>
+              <button className="flex items-center justify-center rounded-full bg-black text-white p-1 w-35 text-sm cursor-pointer duration-150 hover:pl-4 group">
+                Join for Free
+                <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </button>
             </Link>
           </motion.li>
-        ))}
+        )}
+        {/* Logged User */}
+        {user && !loading && (
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <Bell className="size-5" />
 
-        <motion.li variants={itemVariants}>
-          <Link href={"/Signup"}>
-            <button className="flex items-center justify-center rounded-full bg-black text-white p-1 w-35 text-sm cursor-pointer duration-150 hover:pl-4 group">
-              Join for Free 
-              <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </button>
-          </Link>
-        </motion.li>
+              <span className="sr-only">View notifications</span>
+            </Button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Avatar className="size-8 cursor-pointer">
+                  <AvatarImage src={user.avatar || ""} />
+
+                  <AvatarFallback>
+                    {user.firstName.charAt(0)}
+
+                    {user.lastName.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>{user.username}</DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem>My Account</DropdownMenuItem>
+
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="cursor-pointer"
+                >
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
       </motion.ul>
     </header>
   );
