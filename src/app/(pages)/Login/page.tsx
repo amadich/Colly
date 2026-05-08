@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { authService } from "@/features/auth/services/auth.service";
+import { useAuthStore } from "@/features/auth/store/auth.store";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { motion, Variants } from "motion/react";
+import { useRouter } from "next/navigation";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -40,7 +41,10 @@ const itemVariants: Variants = {
 };
 
 export default function LoginPage() {
+  
+  const login = useAuthStore((state) => state.login);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -60,12 +64,13 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
-      await authService.login({
-        email: formData.email,
-        password: formData.password,
-      });
+      await login(
+        formData.email,
+        formData.password
+      );
 
-      alert("Login successful!");
+      router.push("/");
+      router.refresh();
 
       // Later:
       // router.push("/dashboard");

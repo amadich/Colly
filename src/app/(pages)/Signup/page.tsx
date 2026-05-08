@@ -75,7 +75,7 @@ export default function SignUpPage() {
 
         role: "STUDENT",
 
-        avatar: "",
+        avatar: "http://localhost:3000/assets/icons/avatar.png",
       });
 
       alert("Account created successfully!");
@@ -91,7 +91,7 @@ export default function SignUpPage() {
   return (
     <section className="w-full md:grid md:min-h-screen md:grid-cols-2">
       <motion.div
-        initial={{ opacity: 0, x: -30 }}
+        initial={{ opacity: 0, x: -3 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{
           duration: 0.8,
@@ -105,8 +105,8 @@ export default function SignUpPage() {
           width={1920}
           height={1080}
           alt="Pattern background"
-          src="/assets/images/LoginSide_1.jpeg"
-          className="size-full border-none bg-muted object-cover object-center scale-x-[-1]"
+          src="/assets/images/3.jpeg"
+          className="size-full border-none bg-muted object-cover object-bottom-right"
         />
       </motion.div>
 
