@@ -121,11 +121,12 @@ export default function SignUpPage() {
             <Link href={"/"}>
               <div className="flex items-center justify-center gap-4">
                 <Image
-                  src={"/CollyLogo.png"}
+                  src={"/logo.svg"}
                   width={64}
                   height={64}
                   alt="Logo Colly"
-                  className="scale-x-[-1]"
+                  draggable={false}
+                  className="scale-x-[-1] w-16 h-16"
                 />
 
                 <div>

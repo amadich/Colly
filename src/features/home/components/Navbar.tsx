@@ -1,6 +1,8 @@
 "use client";
+import { useEffect, useState } from "react";
+import { socketClient } from "@/lib/socket";
 
-import { ChevronRight, Bell } from "@mynaui/icons-react";
+import { ChevronRight, Bell, MobileSignalFour } from "@mynaui/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, Variants } from "motion/react";
@@ -54,6 +56,8 @@ const itemVariants: Variants = {
 export default function Navbar() {
   const router = useRouter();
 
+  const [onlineCount, setOnlineCount] = useState(0);
+
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
 
@@ -68,6 +72,29 @@ export default function Navbar() {
     }
   };
 
+  useEffect(() => {
+    socketClient.onConnect = () => {
+      console.log("CONNECTED");
+
+      socketClient.subscribe("/topic/online-users", (message) => {
+        console.log("ONLINE:", message.body);
+
+        setOnlineCount(Number(message.body));
+      });
+
+      // 🚀 REQUEST CURRENT COUNT IMMEDIATELY
+      socketClient.publish({
+        destination: "/app/online",
+      });
+    };
+
+    socketClient.activate();
+
+    return () => {
+      socketClient.deactivate();
+    };
+  }, []);
+
   return (
     <header className="flex items-center justify-around p-4">
       {/* LOGO */}
@@ -77,11 +104,12 @@ export default function Navbar() {
         className="flex items-center justify-center gap-4"
       >
         <Image
-          src={"/CollyLogo.png"}
+          src={"/logo.svg"}
           width={64}
           height={64}
           alt="Logo Colly"
-          className="scale-x-[-1]"
+          draggable={false}
+          className="scale-x-[-1] w-16 h-16"
         />
 
         <div>
@@ -167,6 +195,14 @@ export default function Navbar() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            {/* Users Online */}
+            <div className="flex items-center gap-3  text-sm text-green-700">
+              <span className="flex items-center justify-center "> <MobileSignalFour /> {onlineCount}</span> Online
+              <div className="relative flex items-center justify-center">
+                <span className="absolute inline-flex h-3 w-3 rounded-full bg-green-400 opacity-75 animate-ping"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </div>
+            </div>
           </div>
         )}
       </motion.ul>

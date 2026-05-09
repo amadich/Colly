@@ -31,11 +31,12 @@ export default function PageTransition() {
             className="relative"
           >
             <Image
-              src="/CollyLogo.png"
+              src="/logo.svg"
               alt="Colly logo"
               width={60}
               height={60}
-              className="drop-shadow-2xl"
+              draggable={false}
+              className="w-15 h-15 drop-shadow-2xl"
             />
 
             {/* Elegant Ring around logo */}
