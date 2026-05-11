@@ -5,6 +5,13 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { authService } from "@/features/auth/services/auth.service";
 
@@ -48,6 +55,7 @@ export default function SignUpPage() {
     lastName: "",
     username: "",
     age: "",
+    gender: "H",
     email: "",
     password: "",
   });
@@ -70,15 +78,19 @@ export default function SignUpPage() {
         lastName: formData.lastName,
         username: formData.username,
         age: Number(formData.age),
+        gender: formData.gender,
         email: formData.email,
         password: formData.password,
 
         role: "STUDENT",
 
-        avatar: "http://localhost:3000/assets/icons/avatar.png",
+        avatar:
+          formData.gender === "H"
+            ? "https://s3.amadich.tn/avatars/avatar-homme.jpg"
+            : "https://s3.amadich.tn/avatars/avatar-femme.jpg",
       });
 
-      alert("Account created successfully!");
+      window.location.href = "/";
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -205,6 +217,30 @@ export default function SignUpPage() {
                 />
               </motion.div>
             </div>
+
+            <motion.div variants={itemVariants} className="grid gap-2">
+              <Label htmlFor="gender">Gender</Label>
+
+              <Select
+                value={formData.gender}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    gender: value,
+                  }))
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select gender" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectItem value="H">Homme</SelectItem>
+
+                  <SelectItem value="F">Femme</SelectItem>
+                </SelectContent>
+              </Select>
+            </motion.div>
 
             <motion.div variants={itemVariants} className="grid gap-2">
               <Label htmlFor="email">Email</Label>

@@ -20,6 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import SettingUser from "@/components/modals/SettingUser";
 
 const navLinks = [
   { name: "Features", href: "#" },
@@ -183,7 +184,7 @@ export default function Navbar() {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem>My Account</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <SettingUser />
 
                 <DropdownMenuSeparator />
 

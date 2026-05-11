@@ -5,6 +5,7 @@ export interface RegisterRequest {
   email: string;
   password: string;
   age: number;
+  gender: string;
   role: "STUDENT";
   avatar?: string;
 }
@@ -25,6 +26,7 @@ export interface User {
   username: string;
   email: string;
   age: number;
+  gender: string;
   role: string;
   avatar?: string;
 }
