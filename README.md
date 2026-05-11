@@ -20,6 +20,8 @@ Colly helps you:
 * 📅 Discover events and activities
 * 🚀 Build a network for your future
 
+<img width="2920" height="1605" alt="image" src="https://github.com/user-attachments/assets/19149107-60a9-4331-ac51-d69fb682dfe3" />
+
 ---
 
 ## ✨ Features
@@ -36,6 +38,8 @@ Colly helps you:
 * **Clean & Modern UI**
   A smooth and intuitive experience built for today’s students.
 
+<img width="1411" height="773" alt="image" src="https://github.com/user-attachments/assets/f01f4614-1bf1-453c-b58f-535d2cd8e6c1" />
+
 ---
 
 ## 🧠 The Idea Behind Colly
@@ -45,6 +49,8 @@ Colly was created with one simple idea:
 > *Students grow faster when they grow together.*
 
 Instead of feeling isolated or lost, Colly helps students find their "tribe" — people who inspire, support, and grow with them.
+
+<img width="1416" height="772" alt="image" src="https://github.com/user-attachments/assets/ec74be05-db9d-4b51-aa02-1977bd225f0b" />
 
 ---
 
