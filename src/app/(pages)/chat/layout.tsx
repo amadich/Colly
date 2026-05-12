@@ -4,7 +4,11 @@ export default function ChatRoomLayout({children,}: Readonly<{ children: React.R
   return (
     <>
       <UserStatus />
+      <main className="select-none">
+
       {children}
+
+      </main>
     </>
   );
 }

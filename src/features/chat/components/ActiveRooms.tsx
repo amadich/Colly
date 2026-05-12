@@ -4,13 +4,7 @@ import Link from "next/link";
 
 import Image from "next/image";
 
-import {
-    Users,
-    Lock,
-    Globe,
-    ArrowRight,
-    MessageCircle,
-} from "lucide-react";
+import { Users, Lock, Globe, ArrowRight, MessageCircle } from "lucide-react";
 
 type RoomUser = {
   username: string;
@@ -33,17 +27,13 @@ type ActiveRoomsProps = {
   rooms: ActiveRoom[];
 };
 
-export default function ActiveRooms({
-  rooms,
-}: ActiveRoomsProps) {
+export default function ActiveRooms({ rooms }: ActiveRoomsProps) {
   return (
     <section className="w-full">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-5xl font-black">
-            Active Rooms
-          </h2>
+          <h2 className="text-5xl font-black">Active Rooms</h2>
 
           <p className="text-gray-600 text-lg mt-2">
             Students currently chatting
@@ -101,11 +91,7 @@ export default function ActiveRooms({
                       flex
                       items-center
                       justify-center
-                      ${
-                        room.isPrivate
-                          ? "bg-yellow-300"
-                          : "bg-[#d9ffd6]"
-                      }
+                      ${room.isPrivate ? "bg-yellow-300" : "bg-[#d9ffd6]"}
                     `}
                   >
                     {room.isPrivate ? (
@@ -116,16 +102,12 @@ export default function ActiveRooms({
                   </div>
 
                   <div>
-                    <h3 className="text-3xl font-black">
-                      {room.name}
-                    </h3>
+                    <h3 className="text-3xl font-black">{room.name}</h3>
 
                     <div className="flex items-center gap-2 text-gray-600">
                       <MessageCircle className="w-4 h-4" />
 
-                      <span>
-                        {room.onlineCount} online
-                      </span>
+                      <span>{room.onlineCount} online</span>
                     </div>
                   </div>
                 </div>
@@ -139,9 +121,7 @@ export default function ActiveRooms({
             {/* USERS */}
             <div className="mb-8">
               <div className="flex items-center justify-between mb-4">
-                <h4 className="text-xl font-black">
-                  Students Inside
-                </h4>
+                <h4 className="text-xl font-black">Students Inside</h4>
 
                 <div
                   className="
@@ -155,8 +135,7 @@ export default function ActiveRooms({
                     font-bold
                   "
                 >
-                  {room.users.length}/
-                  {room.maxMembers}
+                  {room.users.length}/{room.maxMembers}
                 </div>
               </div>
 
@@ -233,9 +212,7 @@ export default function ActiveRooms({
               <div className="flex items-center gap-2">
                 <Users className="w-5 h-5" />
 
-                <span className="font-bold">
-                  Max {room.maxMembers} members
-                </span>
+                <span className="font-bold">Max {room.maxMembers} members</span>
               </div>
 
               <Link
@@ -262,7 +239,6 @@ export default function ActiveRooms({
                 "
               >
                 Join Room
-
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>

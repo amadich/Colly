@@ -15,6 +15,10 @@ import FrameContent from "@/features/chat/components/FrameContent";
 import { ControlButton } from "@/features/chat/components/ChatBubble";
 
 import OnlineUsers from "@/features/chat/components/OnlineUsers";
+import ChatHistory from "@/features/chat/components/ChatHistory";
+import RoomSwitcher from "@/features/chat/components/RoomSwitcher";
+
+import { uploadFile } from "@/features/chat/lib/upload";
 
 type OnlineUser = {
   id: string;
@@ -67,6 +71,56 @@ export default function ChatRoomPage() {
 
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
 
+  const [rooms, setRooms] = useState([]);
+
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
+  const videoInputRef = useRef<HTMLInputElement>(null);
+
+  // ====================================
+  // LOAD ACTIVE ROOMS
+  // ====================================
+  const loadRooms = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/rooms`,
+        {
+          credentials: "include",
+        },
+      );
+
+      const text = await response.text();
+
+      if (!text) return;
+
+      const data = JSON.parse(text);
+
+      setRooms(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // ====================================
+  // CONTROLLED POLLING
+  // ====================================
+  useEffect(() => {
+    const init = async () => {
+      await loadRooms();
+    };
+
+    init();
+
+    const interval = setInterval(() => {
+      loadRooms();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // ====================================
+  // SOCKET
+  // ====================================
   useEffect(() => {
     const socket = createChatSocket() as unknown as ChatSocket;
 
@@ -99,6 +153,9 @@ export default function ChatRoomPage() {
           );
 
           setOnlineUsers(uniqueUsers);
+
+          // INSTANT ROOM UPDATE
+          loadRooms();
         },
       );
 
@@ -134,6 +191,9 @@ export default function ChatRoomPage() {
         `/topic/room/${roomId}`,
         (message) => {
           const data: ChatMessage = JSON.parse(message.body);
+
+          // INSTANT ROOM UPDATE
+          loadRooms();
 
           // PREVENT DUPLICATE MESSAGES
           setMessages((prev) => {
@@ -194,6 +254,9 @@ export default function ChatRoomPage() {
         }),
       });
 
+      // INSTANT ROOM UPDATE
+      loadRooms();
+
       // =========================
       // LOAD HISTORY
       // =========================
@@ -234,13 +297,28 @@ export default function ChatRoomPage() {
 
     if (!socketRef.current) return;
 
+    // =========================
+    // EXTRACT URL
+    // =========================
+    const url = extractUrl(inputValue);
+
+    // REMOVE URL FROM MESSAGE
+    const cleanedMessage = inputValue.replace(url || "", "").trim();
+
+    // =========================
+    // SEND MESSAGE
+    // =========================
     socketRef.current.publish({
       destination: "/app/chat.send",
 
       body: JSON.stringify({
         roomId,
-        content: inputValue,
-        messageType: "TEXT",
+
+        content: cleanedMessage || inputValue,
+
+        messageType: url ? "LINK" : "TEXT",
+
+        mediaUrl: url || null,
       }),
     });
 
@@ -263,9 +341,86 @@ export default function ChatRoomPage() {
     ).values(),
   );
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file || !socketRef.current) return;
+
+    try {
+      const uploaded = await uploadFile(file);
+
+      socketRef.current.publish({
+        destination: "/app/chat.send",
+
+        body: JSON.stringify({
+          roomId,
+          content: inputValue,
+          messageType: "IMAGE",
+          mediaUrl: uploaded.url,
+        }),
+      });
+
+      setInputValue("");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file || !socketRef.current) return;
+
+    try {
+      const uploaded = await uploadFile(file);
+
+      socketRef.current.publish({
+        destination: "/app/chat.send",
+
+        body: JSON.stringify({
+          roomId,
+          content: "Video shared",
+          messageType: "VIDEO",
+          mediaUrl: uploaded.url,
+        }),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const isValidUrl = (text: string) => {
+    try {
+      new URL(text);
+
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const extractUrl = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    const match = text.match(urlRegex);
+
+    return match ? match[0] : null;
+  };
+
   return (
     <>
       <OnlineUsers users={onlineUsers} />
+
+      <ChatHistory
+        messages={messages}
+        currentFrame={(message) => {
+          if (message.messageType !== "TEXT") {
+            setFrameContent(message);
+          }
+        }}
+      />
+
+      <RoomSwitcher rooms={rooms} currentRoomId={roomId} />
 
       <main
         className="
@@ -340,12 +495,34 @@ export default function ChatRoomPage() {
         >
           {/* BUTTONS */}
           <div className="flex gap-3">
-            <ControlButton label="Upload Image" />
+            <ControlButton
+              label="Upload Image"
+              onClick={() => imageInputRef.current?.click()}
+            />
 
-            <ControlButton label="Share Video" />
+            <ControlButton
+              label="Share Video"
+              onClick={() => videoInputRef.current?.click()}
+            />
 
             <ControlButton label="Stickers 😊" />
           </div>
+
+          <input
+            ref={imageInputRef}
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={handleImageUpload}
+          />
+
+          <input
+            ref={videoInputRef}
+            type="file"
+            accept="video/*"
+            hidden
+            onChange={handleVideoUpload}
+          />
 
           {/* INPUT */}
           <input

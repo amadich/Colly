@@ -9,9 +9,7 @@ interface Props {
 export default function FrameContent({ message }: Props) {
   if (!message) {
     return (
-      <h1 className="text-5xl font-serif italic text-neutral-800">
-        Frame
-      </h1>
+      <h1 className="text-5xl font-serif italic text-neutral-800">Frame</h1>
     );
   }
 
@@ -22,6 +20,7 @@ export default function FrameContent({ message }: Props) {
           src={message.mediaUrl}
           alt="shared"
           className="w-full h-full object-cover rounded-[30px]"
+          draggable="false"
         />
       );
 
@@ -36,21 +35,17 @@ export default function FrameContent({ message }: Props) {
 
     case "LINK":
       return (
-        <a
-          href={message.mediaUrl}
-          target="_blank"
-          className="text-blue-500 underline text-xl"
-        >
-          {message.mediaUrl}
-        </a>
+        <iframe
+          src={message.mediaUrl}
+          className=" w-full h-full rounded-[30px] "
+          allowFullScreen
+        />
       );
 
     default:
       return (
         <div className="text-center">
-          <p className="text-2xl font-bold">
-            {message.content}
-          </p>
+          <p className="text-2xl font-bold">{message.content}</p>
         </div>
       );
   }

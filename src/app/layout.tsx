@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import PageTransition from "@/components/transition/PageTransition";
 import AuthProvider from "@/features/auth/providers/AuthProvider";
+import DevToolsBlocker from "@/components/security/DevToolsBlocker";
 
 export const metadata: Metadata = {
   title: "Colly",
@@ -12,8 +13,10 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
   return (
     <html className="font-geist-sans antialiased">
       <body className="min-h-full flex flex-col">
-        <PageTransition />
-        <AuthProvider>{children}</AuthProvider>
+        <DevToolsBlocker>
+          <PageTransition />
+          <AuthProvider>{children}</AuthProvider>
+        </DevToolsBlocker>
       </body>
     </html>
   );

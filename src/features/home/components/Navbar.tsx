@@ -23,7 +23,7 @@ import {
 import SettingUser from "@/components/modals/SettingUser";
 
 const navLinks = [
-  { name: "Features", href: "#" },
+  { name: "Rooms", href: "/rooms" },
   { name: "Communities", href: "#" },
   { name: "Events", href: "#" },
   { name: "About Us", href: "#" },

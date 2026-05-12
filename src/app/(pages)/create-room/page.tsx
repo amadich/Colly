@@ -1,13 +1,9 @@
 "use client";
-
 import { useState } from "react";
 
 import { useRouter } from "next/navigation";
 
 import { Lock, Users, Sparkles, ArrowRight } from "lucide-react";
-import ActiveRooms, {
-  ActiveRoom,
-} from "@/features/chat/components/ActiveRooms";
 
 export default function CreateRoomPage() {
   const router = useRouter();
@@ -55,37 +51,8 @@ export default function CreateRoomPage() {
     }
   };
 
-  const rooms: ActiveRoom[] = [
-    {
-      id: "1",
-
-      name: "Frontend Masters",
-
-      description: "Discuss React, NextJS and UI/UX projects.",
-
-      isPrivate: true,
-
-      maxMembers: 100,
-
-      onlineCount: 4,
-
-      users: [
-        {
-          username: "amadich",
-          avatar: "https://s3.amadich.tn/avatars/avatar-homme.jpg",
-        },
-
-        {
-          username: "jean",
-          avatar: "https://s3.amadich.tn/avatars/avatar-femme.jpg",
-        },
-      ],
-    },
-  ];
-
   return (
     <>
-      <ActiveRooms rooms={rooms} />;
       <main
         className="
         min-h-[calc(100vh-80px)]
