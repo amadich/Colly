@@ -43,6 +43,10 @@ export default function SettingUser() {
   const [age, setAge] = useState(user?.age || "");
   const [gender, setGender] = useState(user?.gender || "");
 
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const setUser = useAuthStore((state) => state.setUser);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,6 +65,36 @@ export default function SettingUser() {
       setUser(updatedUser);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      if (newPassword && newPassword !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+      }
+
+      const updatedUser = await authService.updateProfile({
+        firstName,
+        lastName,
+        username,
+        email,
+        age: Number(age),
+        gender,
+
+        currentPassword: currentPassword || undefined,
+        newPassword: newPassword || undefined,
+      });
+
+      setUser(updatedUser);
+
+      window.location.href = "/";
+      
+    } catch (error) {
+      console.error(error);
+
+      alert("Failed to update profile");
     }
   };
 
@@ -202,7 +236,7 @@ export default function SettingUser() {
             <div className="space-y-2">
               <Label>Gender</Label>
 
-              <Select defaultValue={gender}>
+              <Select defaultValue={gender} onValueChange={setGender}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select gender" />
                 </SelectTrigger>
@@ -224,11 +258,26 @@ export default function SettingUser() {
             </div>
 
             <div className="grid gap-4 md:grid-cols-3">
-              <Input type="password" placeholder="Current password" />
+              <Input
+                type="password"
+                placeholder="Current password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+              />
 
-              <Input type="password" placeholder="New password" />
+              <Input
+                type="password"
+                placeholder="New password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
 
-              <Input type="password" placeholder="Confirm password" />
+              <Input
+                type="password"
+                placeholder="Confirm password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
             </div>
           </div>
 
@@ -236,7 +285,7 @@ export default function SettingUser() {
           <div className="flex justify-end gap-3">
             <Button variant="outline">Cancel</Button>
 
-            <Button>Save Changes</Button>
+            <Button onClick={handleSave}>Save Changes</Button>
           </div>
         </div>
       </DialogContent>

@@ -37,6 +37,22 @@ export const authService = {
     });
   },
 
+  async updateProfile(payload: {
+    firstName: string;
+    lastName: string;
+    username: string;
+    email: string;
+    age: number;
+    gender: string;
+    currentPassword?: string;
+    newPassword?: string;
+  }): Promise<User> {
+    return apiFetch<User>("/users/profile", {
+      method: "PUT",
+      body: payload,
+    });
+  },
+
   async logout(): Promise<string> {
     return apiFetch<string>("/auth/logout", {
       method: "POST",

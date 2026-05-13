@@ -67,7 +67,7 @@ export default function Navbar() {
       await logout();
 
       router.refresh();
-      router.push("/");
+      router.push("/Login");
     } catch (error) {
       console.error(error);
     }

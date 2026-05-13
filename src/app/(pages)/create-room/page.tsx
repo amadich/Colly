@@ -24,7 +24,7 @@ export default function CreateRoomPage() {
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:8080/api/rooms", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/rooms`, {
         method: "POST",
 
         credentials: "include",
