@@ -117,7 +117,7 @@ export default function SignUpPage() {
           width={1920}
           height={1080}
           alt="Pattern background"
-          src="/assets/images/3.jpeg"
+          src="/assets/images/signupside.webp"
           className="size-full border-none bg-muted object-cover object-bottom-right"
         />
       </motion.div>

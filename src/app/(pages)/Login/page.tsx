@@ -209,7 +209,7 @@ export default function LoginPage() {
           width={1920}
           height={1080}
           alt="Pattern background"
-          src="/assets/images/SignUpSide.jpeg"
+          src="/assets/images/signinside.webp"
           className="size-full border-none bg-muted object-cover object-center"
         />
       </motion.div>

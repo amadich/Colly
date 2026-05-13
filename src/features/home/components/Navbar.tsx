@@ -67,7 +67,7 @@ export default function Navbar() {
       await logout();
 
       router.refresh();
-      router.push("/Login");
+      router.push("/");
     } catch (error) {
       console.error(error);
     }
@@ -103,6 +103,7 @@ export default function Navbar() {
         initial={{ x: -20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         className="flex items-center justify-center gap-4"
+        onClick={() => router.push("/")}
       >
         <Image
           src={"/logo.svg"}

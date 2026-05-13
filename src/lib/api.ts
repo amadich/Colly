@@ -10,22 +10,26 @@ export async function apiFetch<T>(
 ): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
-
     credentials: "include",
-
     headers: {
       "Content-Type": "application/json",
       ...options.headers,
     },
-
     body: options.body ? JSON.stringify(options.body) : undefined,
   });
 
-  const data = await response.json();
+  let data = null;
 
-  if (!response.ok) {
-    throw new Error(data.message || "Something went wrong");
+  // ✅ Only parse JSON if response has content
+  const contentType = response.headers.get("content-type");
+
+  if (contentType?.includes("application/json")) {
+    data = await response.json();
   }
 
-  return data;
+  if (!response.ok) {
+    throw new Error(data?.message || "Something went wrong");
+  }
+
+  return data as T;
 }
