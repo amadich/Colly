@@ -30,6 +30,9 @@ import { Camera, User, Mail, Lock } from "@mynaui/icons-react";
 
 import { useAuthStore } from "@/features/auth/store/auth.store";
 
+import { uploadFile } from "@/features/chat/lib/upload";
+import { authService } from "@/features/auth/services/auth.service";
+
 export default function SettingUser() {
   const user = useAuthStore((state) => state.user);
 
@@ -39,6 +42,27 @@ export default function SettingUser() {
   const [email, setEmail] = useState(user?.email || "");
   const [age, setAge] = useState(user?.age || "");
   const [gender, setGender] = useState(user?.gender || "");
+
+  const setUser = useAuthStore((state) => state.setUser);
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    try {
+      // 1 upload to MinIO
+      const uploaded = await uploadFile(file, "avatars");
+
+      // 2 save in backend
+      const updatedUser = await authService.updateAvatar(uploaded.url);
+
+      // 3 update zustand instantly
+      setUser(updatedUser);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Dialog>
@@ -81,6 +105,7 @@ export default function SettingUser() {
                   id="avatar"
                   className="hidden"
                   accept="image/*"
+                  onChange={handleAvatarUpload}
                 />
               </label>
             </div>

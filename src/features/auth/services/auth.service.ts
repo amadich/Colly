@@ -28,6 +28,15 @@ export const authService = {
     });
   },
 
+  async updateAvatar(avatar: string): Promise<User> {
+    return apiFetch<User>("/users/avatar", {
+      method: "PUT",
+      body: {
+        avatar,
+      },
+    });
+  },
+
   async logout(): Promise<string> {
     return apiFetch<string>("/auth/logout", {
       method: "POST",

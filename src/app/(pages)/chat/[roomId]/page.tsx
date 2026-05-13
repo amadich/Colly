@@ -1,5 +1,4 @@
-"use client";
-
+"use client";;
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { AnimatePresence } from "motion/react";
@@ -347,7 +346,7 @@ export default function ChatRoomPage() {
     if (!file || !socketRef.current) return;
 
     try {
-      const uploaded = await uploadFile(file);
+      const uploaded = await uploadFile(file, "chat");
 
       socketRef.current.publish({
         destination: "/app/chat.send",
@@ -372,7 +371,7 @@ export default function ChatRoomPage() {
     if (!file || !socketRef.current) return;
 
     try {
-      const uploaded = await uploadFile(file);
+      const uploaded = await uploadFile(file, "chat");
 
       socketRef.current.publish({
         destination: "/app/chat.send",
@@ -409,18 +408,20 @@ export default function ChatRoomPage() {
 
   return (
     <>
-      <OnlineUsers users={onlineUsers} />
+      <div>
+        <OnlineUsers users={onlineUsers} />
 
-      <ChatHistory
-        messages={messages}
-        currentFrame={(message) => {
-          if (message.messageType !== "TEXT") {
-            setFrameContent(message);
-          }
-        }}
-      />
+        <ChatHistory
+          messages={messages}
+          currentFrame={(message) => {
+            if (message.messageType !== "TEXT") {
+              setFrameContent(message);
+            }
+          }}
+        />
 
-      <RoomSwitcher rooms={rooms} currentRoomId={roomId} />
+        <RoomSwitcher rooms={rooms} currentRoomId={roomId} />
+      </div>
 
       <main
         className="
