@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 
 import { Lock, Users, Sparkles, ArrowRight } from "lucide-react";
 
+import UserSelector from "@/features/user/components/UserSelector";
+
+import { User } from "@/features/user/types/user.types";
+
 export default function CreateRoomPage() {
   const router = useRouter();
 
@@ -18,28 +22,35 @@ export default function CreateRoomPage() {
 
   const [loading, setLoading] = useState(false);
 
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+
   const handleCreateRoom = async () => {
     if (!roomName.trim()) return;
 
     try {
       setLoading(true);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/rooms`, {
-        method: "POST",
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/rooms`,
+        {
+          method: "POST",
 
-        credentials: "include",
+          credentials: "include",
 
-        headers: {
-          "Content-Type": "application/json",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            name: roomName,
+            description,
+            isPrivate,
+            maxMembers,
+
+            memberIds: selectedUsers.map((user) => user.id),
+          }),
         },
-
-        body: JSON.stringify({
-          name: roomName,
-          description,
-          isPrivate,
-          maxMembers,
-        }),
-      });
+      );
 
       const room = await response.json();
 
@@ -192,6 +203,11 @@ export default function CreateRoomPage() {
               "
               />
             </div>
+
+            <UserSelector
+              selectedUsers={selectedUsers}
+              setSelectedUsers={setSelectedUsers}
+            />
 
             {/* OPTIONS */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

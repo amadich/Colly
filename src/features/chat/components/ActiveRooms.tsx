@@ -1,12 +1,20 @@
 "use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { Users, Lock, Globe, ArrowRight, MessageCircle } from "lucide-react";
 import { motion, Variants } from "framer-motion";
+import { useState } from "react";
+import UpdateRoomModal from "./UpdateRoomModal";
 
 type RoomUser = {
+  id: string;
+
   username: string;
+
+  firstName: string;
+
+  lastName: string;
+
   avatar: string;
 };
 
@@ -18,6 +26,7 @@ export type ActiveRoom = {
   maxMembers: number;
   users: RoomUser[];
   onlineCount: number;
+  isOwner: boolean;
 };
 
 type ActiveRoomsProps = {
@@ -56,6 +65,7 @@ const cardVariants: Variants = {
 };
 
 export default function ActiveRooms({ rooms }: ActiveRoomsProps) {
+  const [editingRoom, setEditingRoom] = useState<ActiveRoom | null>(null);
   return (
     <motion.section
       initial="hidden"
@@ -189,6 +199,13 @@ export default function ActiveRooms({ rooms }: ActiveRoomsProps) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
+                {room.isOwner && (
+                  <button
+                    onClick={() => setEditingRoom(room)}
+                    className=" h-14 px-6 rounded-2xl border-4 border-black bg-yellow-300 font-black">
+                    Edit
+                  </button>
+                )}
                 <Link
                   href={`/chat/${room.id}`}
                   className="h-14 px-8 rounded-2xl border-4 border-black bg-black text-white flex items-center justify-center gap-3 font-black text-lg shadow-[6px_6px_0px_0px_#4ade80] hover:shadow-none transition-shadow"
@@ -201,6 +218,13 @@ export default function ActiveRooms({ rooms }: ActiveRoomsProps) {
           </motion.div>
         ))}
       </div>
+      {editingRoom && (
+        <UpdateRoomModal
+          room={editingRoom}
+          onClose={() => setEditingRoom(null)}
+          onUpdated={() => window.location.reload()}
+        />
+      )}
     </motion.section>
   );
 }
