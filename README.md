@@ -51,6 +51,7 @@ Colly was created with one simple idea:
 Instead of feeling isolated or lost, Colly helps students find their "tribe" — people who inspire, support, and grow with them.
 
 <img width="1416" height="772" alt="image" src="https://github.com/user-attachments/assets/ec74be05-db9d-4b51-aa02-1977bd225f0b" />
+<img width="1430" height="790" alt="image" src="https://github.com/user-attachments/assets/f71bc965-f326-4277-9f28-6a7e4ac7ee12" />
 
 ---
 
@@ -66,6 +67,9 @@ Instead of feeling isolated or lost, Colly helps students find their "tribe" —
 * AI-powered recommendations 🤖
 * Student profiles & portfolios 🧑‍🎓
 * Mobile app version 📱
+
+<img width="1440" height="900" alt="image" src="https://github.com/user-attachments/assets/ac080c98-5c74-4717-a1fd-20e0cc019e8b" />
+<img width="1432" height="816" alt="image" src="https://github.com/user-attachments/assets/15476eb8-bb81-4816-9c15-6acd4e369ce2" />
 
 ---
 
