@@ -38,6 +38,10 @@ Colly helps you:
 * **Clean & Modern UI**
   A smooth and intuitive experience built for today’s students.
 
+
+<img width="1440" height="873" alt="image" src="https://github.com/user-attachments/assets/2a23774a-759e-4a6f-b93b-604b66c40b8b" />
+
+
 <img width="1411" height="773" alt="image" src="https://github.com/user-attachments/assets/f01f4614-1bf1-453c-b58f-535d2cd8e6c1" />
 
 ---
