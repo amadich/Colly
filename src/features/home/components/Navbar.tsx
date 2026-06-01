@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import { useEffect, useState } from "react";
 
 import { apiFetch } from "@/lib/api";
@@ -31,9 +31,9 @@ import FriendRequestsSheet from "@/components/modals/FriendRequestsSheet";
 
 const navLinks = [
   { name: "Rooms", href: "/rooms" },
-  { name: "Communities", href: "#" },
-  { name: "Events", href: "#" },
-  { name: "About Us", href: "#" },
+  // { name: "Communities", href: "#" },
+  // { name: "Events", href: "#" },
+  { name: "Create Room", href: "/create-room" },
   { name: "Login", href: "/Login" },
 ];
 
@@ -205,7 +205,13 @@ export default function Navbar() {
       >
         {navLinks
           .filter((link) => {
+            // Hide Login when authenticated
             if (user && link.name === "Login") {
+              return false;
+            }
+
+            // Hide Rooms and Create Room when not authenticated
+            if (!user && ["Rooms", "Create Room"].includes(link.name)) {
               return false;
             }
 
@@ -288,7 +294,11 @@ export default function Navbar() {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={() => router.push("/profile/FriendsPage")}>My Account</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => router.push("/profile/FriendsPage")}
+                >
+                  My Account
+                </DropdownMenuItem>
 
                 <SettingUser />
 

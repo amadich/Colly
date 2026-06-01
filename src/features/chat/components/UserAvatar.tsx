@@ -12,6 +12,9 @@ interface Props {
   avatar: string;
   activeBubble?: BubbleMessage;
   style: string;
+  isFullscreenMode?: boolean;
+  alpha?: number; // Dynamic transparency parameter
+  bubbleColor?: string; // New customization variable pass-through
 }
 
 export default function UserAvatar({
@@ -22,33 +25,52 @@ export default function UserAvatar({
   avatar,
   activeBubble,
   style,
+  isFullscreenMode = false,
+  alpha = 100,
+  bubbleColor = "white",
 }: Props) {
+  // If alpha slider is explicitly zero, hide it entirely from screen readers and pointer flows
+  const isHidden = isFullscreenMode && alpha === 0;
+
   return (
     <div
+      style={{
+        opacity: isFullscreenMode ? alpha / 100 : 0.95,
+      }}
       className={`
-    absolute
-    z-10
-    opacity-90
-    scale-95
-    ${style}
-    flex
-    flex-col
-    items-center
-  `}
+        absolute
+        scale-90
+        sm:scale-95
+        ${style}
+        flex
+        flex-col
+        items-center
+        transition-opacity
+        duration-200
+        ease-out
+        ${isFullscreenMode ? "z-50" : "z-10"}
+        ${isHidden ? "pointer-events-none select-none invisible opacity-0!" : "visible"}
+      `}
     >
       <div className="relative">
         {activeBubble && (
           <ChatBubble
             className=""
             content={activeBubble.content}
+            color={bubbleColor}
           />
         )}
 
         <div
           className="
-            w-32
-            h-32
-            rounded-[30px]
+            w-20
+            h-20
+            sm:w-28
+            sm:h-28
+            md:w-32
+            md:h-32
+            rounded-[24px]
+            sm:rounded-[30px]
             overflow-hidden
             border-3
             border-black
@@ -67,8 +89,8 @@ export default function UserAvatar({
         </div>
       </div>
 
-      <span className="mt-2 font-bold text-lg">
-        {firstName} {lastName}
+      <span className="mt-1 sm:mt-2 font-bold text-sm sm:text-base md:text-lg whitespace-nowrap bg-white border-2 border-black px-2 py-0.5 rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+        {firstName || username} {lastName}
       </span>
     </div>
   );

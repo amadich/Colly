@@ -112,12 +112,12 @@ export default function RoomSwitcher({ rooms, currentRoomId }: Props) {
                           {room.isPrivate ? (
                             <Lock className="w-4 h-4 text-orange-500" />
                           ) : (
-                            <Globe className="w-4 h-4 text-blue-500" />
+                            <Globe className="w-4 h-4 text-gray-500" />
                           )}
                           <span className="font-black text-sm uppercase">
                             {room.name}
                           </span>
-                          <span>{room.description}</span>
+                         
                         </div>
 
                         <div className="flex items-center gap-1 text-xs font-bold bg-black text-white px-2 py-0.5 rounded-full">

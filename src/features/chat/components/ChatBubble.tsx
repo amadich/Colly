@@ -5,48 +5,68 @@ import { motion } from "motion/react";
 interface Props {
   content: string;
   className?: string;
+  color?: string; // Color option pass-through prop
 }
 
-export default function ChatBubble({ content, className }: Props) {
+export default function ChatBubble({ content, className, color = "white" }: Props) {
+  // Map clean neo-brutalist theme color combinations
+  const colorMap: Record<string, string> = {
+    white: "bg-white text-black",
+    green: "bg-[#d9ffd6] text-black",
+    yellow: "bg-yellow-300 text-black",
+    blue: "bg-[#5da9ff] text-black",
+  };
+
+  const selectedColorClass = colorMap[color] || colorMap.white;
+
+  // Dynamically assign pointer interior tint matches
+  const pointerColors: Record<string, string> = {
+    white: "#ffffff",
+    green: "#d9ffd6",
+    yellow: "#fde047", // yellow-300
+    blue: "#5da9ff",
+  };
+  const currentPointerTint = pointerColors[color] || pointerColors.white;
+
   return (
     <motion.div
-      initial={{
-        opacity: 0,
-        y: 10,
-        scale: 0.8,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-        scale: 1,
-      }}
-      exit={{
-        opacity: 0,
-        scale: 0.8,
-      }}
-      transition={{
-        duration: 0.2,
-      }}
+      initial={{ opacity: 0, y: 15, scale: 0.85, x: "-50%" }}
+      animate={{ opacity: 1, y: 0, scale: 1, x: "-50%" }}
+      exit={{ opacity: 0, scale: 0.85, x: "-50%" }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className={`
         absolute
--bottom-8
-left-1/2
--translate-x-1/2
+        bottom-full
+        left-1/2
+        -translate-x-1/2
+        mb-4
         z-40
-        bg-white
         border-[3px]
         border-black
-        rounded-3xl
-        px-5
-        py-3
-        min-w-30
-        max-w-55
+        rounded-[20px]
+        px-4
+        py-2.5
+        w-max
+        max-w-[240px]
         text-center
-        shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]
-        ${className}
+        shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+        font-bold 
+        text-sm 
+        sm:text-base 
+        break-words 
+        leading-tight
+        ${selectedColorClass}
+        ${className || ""}
       `}
     >
-      <p className="font-semibold wrap-break-word">{content}</p>
+      <p>{content}</p>
+
+      {/* SPEECH BUBBLE TRIANGLE POINTER */}
+      <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-[8px] border-x-transparent border-t-[8px] border-t-black" />
+      <div 
+        className="absolute top-[100%] left-1/2 -translate-x-1/2 w-0 h-0 border-x-[6px] border-x-transparent border-t-[6px] -mt-[3px]" 
+        style={{ borderTopColor: currentPointerTint }}
+      />
     </motion.div>
   );
 }
@@ -62,15 +82,19 @@ export function ControlButton({
     <button
       onClick={onClick}
       className="
-        border-[3px]
+        border-4
         border-black
         bg-white
         rounded-2xl
         px-5
-        py-2
+        py-1.5
+        font-black
+        text-sm
+        text-black
         shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-        hover:translate-y-0.5
-        duration-150
+        hover:bg-neutral-100
+        transition-colors
+        cursor-pointer
       "
     >
       {label}
