@@ -8,7 +8,13 @@ import { motion } from "motion/react";
 import { useAuthStore } from "@/features/auth/store/auth.store";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
+import { useRouter } from "next/navigation";
+import { useAudioStore } from "@/shared/audio/audio.store";
+
 export default function Hero6() {
+  const router = useRouter();
+  const play = useAudioStore((s) => s.play);
+
   const user = useAuthStore((state) => state.user);
 
   return (
@@ -41,12 +47,17 @@ export default function Hero6() {
           ) : (
             <>
               {/* BROWSE ROOMS */}
-              <Link href="/rooms">
-                <button className="flex h-12 w-48 items-center justify-center rounded-full bg-black text-white text-sm duration-150 hover:bg-white hover:text-black hover:border cursor-pointer">
-                  Browse Rooms
-                  <ChevronRight className="w-5 h-5 ml-1" />
-                </button>
-              </Link>
+
+              <button
+                onClick={() => {
+                  play("https://s3.amadich.tn/colly/throwdown_ms_[cut_9sec].mp3");
+                  router.push("/rooms");
+                }}
+                className="flex h-12 w-48 items-center justify-center rounded-full bg-black text-white text-sm duration-150 hover:bg-white hover:text-black hover:border cursor-pointer"
+              >
+                Browse Rooms
+                <ChevronRight className="w-5 h-5 ml-1" />
+              </button>
 
               {/* CREATE ROOM */}
               <Link href="/create-room">

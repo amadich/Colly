@@ -5,11 +5,16 @@ import ActiveRooms, {
   ActiveRoom,
 } from "@/features/chat/components/ActiveRooms";
 import { motion } from "framer-motion";
-import { House } from "lucide-react";
+import { Music, VolumeX, House } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+import { useAudioStore } from "@/shared/audio/audio.store";
 
 export default function RoomsPage() {
   const router = useRouter();
+
+  const toggleMusic = useAudioStore((s) => s.toggle);
+  const isPlaying = useAudioStore((s) => s.isPlaying);
 
   const [rooms, setRooms] = useState<ActiveRoom[]>([]);
   const [loading, setLoading] = useState(true);
@@ -100,18 +105,33 @@ export default function RoomsPage() {
 
         {/* Floating Accent Design Elements to mimic the UI screenshot */}
         <div className="absolute top-8 right-8 flex gap-4 z-20">
-          <div className=" z-50">
-            <motion.button
-              whileHover={{ scale: 1.1, rotate: -5 }}
-              whileTap={{ scale: 0.9 }}
-              className="w-14 h-14 bg-[#ffeb3b] border-4 border-black rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer"
-              onClick={() => {
-                router.push("/");
-              }}
-            >
-              <House size={28} strokeWidth={3} />
-            </motion.button>
-          </div>
+          {/* HOME BUTTON */}
+          <motion.button
+            whileHover={{ scale: 1.1, rotate: -5 }}
+            whileTap={{ scale: 0.9 }}
+            className="w-14 h-14 bg-[#ffeb3b] border-4 border-black rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer"
+            onClick={() => router.push("/")}
+          >
+            <House size={28} strokeWidth={3} />
+          </motion.button>
+
+          {/* MUSIC TOGGLE BUTTON */}
+          <motion.button
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileTap={{ scale: 0.9 }}
+            className={`w-14 h-14 border-4 border-black rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer transition-colors
+      ${isPlaying ? "bg-green-300" : "bg-red-300"}
+    `}
+            onClick={() =>
+              toggleMusic("https://s3.amadich.tn/colly/throwdown!.mp3")
+            }
+          >
+            {isPlaying ? (
+              <Music size={26} strokeWidth={2.5} />
+            ) : (
+              <VolumeX size={26} strokeWidth={2.5} />
+            )}
+          </motion.button>
         </div>
 
         {/* Anime Character - Absolute positioned sticking to the bottom layout */}

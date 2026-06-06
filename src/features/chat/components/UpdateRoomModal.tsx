@@ -117,28 +117,31 @@ export default function UpdateRoomModal({ room, onClose, onUpdated }: Props) {
 
   return (
     <div
-      className="
-        fixed
-        inset-0
-        bg-black/50
-        z-50
-        flex
-        items-center
-        justify-center
-        p-6
-      "
-    >
+  className="
+    absolute
+    inset-0
+    bg-black/50
+    z-9999
+    flex
+    items-center
+    justify-center
+    p-6
+  "
+>
       <div
-        className="
-          w-full
-          max-w-2xl
-          bg-white
-          rounded-3xl
-          border-4
-          border-black
-          p-8
-        "
-      >
+  className="
+    w-full
+    h-full
+    max-w-2xl
+    bg-white
+    rounded-3xl
+    border-4
+    border-black
+    p-8
+    relative
+    z-10000
+  "
+>
         <h2 className="text-4xl font-black mb-6">Update Room</h2>
 
         <div className="flex flex-col gap-5">
