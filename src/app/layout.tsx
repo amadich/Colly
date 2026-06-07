@@ -1,39 +1,78 @@
-"use client";
-
-import { useState } from "react";
+import type { Metadata } from "next";
+import RootLayoutClient from "./RootLayoutClient";
 import "./globals.css";
-import AuthProvider from "@/features/auth/providers/AuthProvider";
-import DevToolsBlocker from "@/components/security/DevToolsBlocker";
-import AudioProvider from "@/components/providers/AudioProvider";
-import PageTransition2 from "@/components/transition/PageTransition_2";
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [showTransitionComponent, setShowTransitionComponent] = useState(true);
-  const [isContentHidden, setIsContentHidden] = useState(true);
+export const metadata: Metadata = {
+  metadataBase: new URL("https://colly.amadich.tn"),
 
-  return (
-    <html lang="en" className="font-geist-sans antialiased">
-      <body className="min-h-full flex flex-col bg-white"> 
-        <DevToolsBlocker>
-          
-          {showTransitionComponent && (
-            <PageTransition2 
-              onCenter={() => setIsContentHidden(false)} // Reveals content behind while panels are still locked in center!
-              onComplete={() => setShowTransitionComponent(false)} // Completely safely unmounts after exit finishes
-            />
-          )}
-          
-          {/* The content stays invisible during the 0.8s entry slide.
-            Once they hit the center, it becomes visible instantly under the panels!
-          */}
-          <div className={isContentHidden ? "invisible opacity-0" : "visible opacity-100"}>
-            <AuthProvider>
-              <AudioProvider>{children}</AudioProvider>
-            </AuthProvider>
-          </div>
+  title: {
+    default: "Colly - Find Your Tribe, Build Your Network",
+    template: "%s | Colly",
+  },
 
-        </DevToolsBlocker>
-      </body>
-    </html>
-  );
+  description:
+    "Colly is a student-focused platform that helps you connect with like-minded students, build meaningful friendships, discover communities, find study partners, and explore opportunities that shape your future.",
+
+  keywords: [
+    "students",
+    "student community",
+    "study partners",
+    "friendship platform",
+    "student networking",
+    "student events",
+    "college community",
+    "university students",
+    "student opportunities",
+    "Colly",
+  ],
+
+  authors: [
+    {
+      name: "Colly",
+    },
+  ],
+
+  creator: "Colly",
+  publisher: "Colly",
+
+  openGraph: {
+    title: "Colly - Find Your Tribe, Build Your Network",
+    description:
+      "Connect with like-minded students, build friendships, discover communities, and unlock opportunities that shape your future.",
+    url: "https://colly.amadich.tn",
+    siteName: "Colly",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "https://colly.amadich.tn/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "Colly Logo",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Colly - Find Your Tribe, Build Your Network",
+    description:
+      "Connect with students, build friendships, discover communities, and explore opportunities with Colly.",
+    images: ["https://colly.amadich.tn/logo.svg"],
+  },
+
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export default function RootLayout({children,}: {children: React.ReactNode;}) {
+  return <RootLayoutClient>{children}</RootLayoutClient>;
 }
