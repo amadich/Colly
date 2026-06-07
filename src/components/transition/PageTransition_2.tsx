@@ -15,7 +15,7 @@ export default function PageTransition2({
   onCenter, 
   onComplete,
   bgCharSrc = "/assets/images/anime_char_1.webp", // fallback default
-  fgCharSrc = "/assets/images/anime_char_2.webp"  // fallback default
+  fgCharSrc = "/assets/images/anime_char_4.webp"  // fallback default
 }: PageTransitionProps) {
   const [isExiting, setIsExiting] = useState(false);
 
