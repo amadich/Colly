@@ -15,8 +15,8 @@ export default function CreateRoomLayout({ children }: Readonly<{ children: Reac
             onCenter={() => setIsContentHidden(false)}
             onComplete={() => setShowTransitionComponent(false)}
             // Pass your specific custom character files here!
-            bgCharSrc="/assets/images/anime_char_1.webp" 
-            fgCharSrc="/assets/images/anime_char_3.webp" 
+            bgCharSrc="/assets/images/cat_hero_1.webp" 
+            fgCharSrc="/assets/images/cat_hero_1.webp" 
           />
         )}
 
