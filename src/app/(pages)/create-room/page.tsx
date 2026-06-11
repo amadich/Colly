@@ -196,14 +196,14 @@ export default function CreateRoomPage() {
 
         {/* Anime Character - Locked tightly to the bottom layout */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[90%] h-[85%] z-10 select-none pointer-events-none">
-          <Image
+          {/* <Image
             src="/assets/images/anime_character.webp"
             alt="Anime Character"
             fill
             priority
             sizes="52vw"
             className="object-contain object-bottom"
-          />
+          /> */}
         </div>
       </section>
     </main>
